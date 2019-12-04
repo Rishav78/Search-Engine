@@ -9,10 +9,11 @@
 
 using namespace std;
 
+int fn = 0;
+
 // GENERATE FILE NAME
 string name() {
-    static int i = 0;
-    return to_string(i++);
+    return to_string(fn++);
 }
 
 // STRING COMPARE
@@ -131,6 +132,16 @@ vector<string> ftechLinks(string htmlCode) {
     return links;
 }
 
+void updateInfo(int n) {
+    FILE *ptr = fopen("./settings.txt", "w");
+    fprintf(ptr, "%d", n);
+}
+
+void initilizeFilename() {
+    FILE *ptr = fopen("./settings.txt", "r");
+    fscanf(ptr, "%d", &fn);
+}
+
 int getAndSavepage(string URL, string path, int depth) {
     if(depth == 0) {
         cout << "Max depth reached" << endl;
@@ -148,6 +159,7 @@ int getAndSavepage(string URL, string path, int depth) {
     for(int i=0;i<links.size();i++){
         int error = getAndSavepage(links[i], path, depth -1);
         if(error == -1) break;
+        // updateInfo(fn);
     }
     return 0;
 }
@@ -155,12 +167,11 @@ int getAndSavepage(string URL, string path, int depth) {
 int main(int argc, char *argv[]) {
     // ERROR CHECKING
     if(!validArguments(argc, argv)) return 0;
-    
     int depth = stoi(argv[2]);
     string URL = argv[1], path = argv[3];
     if(path[path.length()-1] != '/') 
         path += '/';
+    // initilizeFilename();
     getAndSavepage(URL, path, depth);
-
     return 0;
 }
