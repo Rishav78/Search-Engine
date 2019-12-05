@@ -172,6 +172,6 @@ int main(int argc, char *argv[]) {
     if(path[path.length()-1] != '/') 
         path += '/';
     // initilizeFilename();
-    getAndSavepage(URL, path, depth);
+    getAndSavepage(URL, path+"HTML/", depth);
     return 0;
 }

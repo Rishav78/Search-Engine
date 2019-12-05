@@ -128,8 +128,8 @@ void saveKeyword(string keyword, string filename, string tagname, int count) {
     }
 }
 
-void retriveIndex() {
-    FILE *ptr = fopen("./Index/index.txt", "r");
+void retriveIndex(string path) {
+    FILE *ptr = fopen(path.c_str(), "r");
     char file[100], keyword[100], tags[100];
     int d;
     while(fscanf(ptr,"%s %s %s %d", file, tags, keyword, &d) != EOF) {
@@ -191,10 +191,9 @@ void userQuery() {
     for(int i=0;i<words.size();i++) {
         int index = (int)words[i][0];
         Keyword *key = keyhash[index].ptr;
-        cout << index << endl;
         if(!key) continue;
         while(key) {
-            if(key->str == words[i]) {
+            if(key->str == words[i] || key->str.find(words[i]) != string::npos) {
                 Filename *file = key->files;
                 while(file) {
                     int total = 0;
@@ -248,10 +247,18 @@ void show() {
     }
 }
 
-int main() {
-   retriveIndex();
-//    cout << " fghjkl" << endl;
-// show();
-    userQuery();
+bool validArguments(int argc, char *argv[]) {
+    if(argc <2 || argc > 2) {
+        cout << "Invalid number of arguments" << endl;
+        return false;
+    }
+    return true;
+}
 
+int main(int argc, char *argv[]) {
+    if(!validArguments(argc, argv)) return 0;
+    string path = argv[1];
+    if(path[path.length()-1] != '/') path += '/'; 
+    retriveIndex(path+"Index/index.txt");
+    userQuery();
 }

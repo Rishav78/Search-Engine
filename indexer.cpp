@@ -127,8 +127,8 @@ void show() {
     }
 }
 
-void saveIndex() {
-    FILE *p = fopen("./Index/index.txt", "a");
+void saveIndex(string path) {
+    FILE *p = fopen(path.c_str(), "a");
     for(int i=0;i<123;i++) {
         Keyword *ptr = keyhash[i].ptr;
         if(ptr) {
@@ -248,7 +248,7 @@ int main(int argc, char *argv[]) {
     cout << keyhash[0].ptr << endl;
     string path = argv[1];
     if(path[path.length()-1] != '/') path += '/';
-    getAllHtmlFiles(path);
+    getAllHtmlFiles(path+"HTML/");
     // show();
-    saveIndex();
+    saveIndex(path+"Index/index.txt");
 }
